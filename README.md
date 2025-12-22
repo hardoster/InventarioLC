@@ -1,0 +1,2 @@
+# InventarioLC
+inventario lc
