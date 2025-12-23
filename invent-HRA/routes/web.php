@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\EquipoController;
-
+use App\Http\Controllers\ReportesController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -11,6 +11,10 @@ Route::get('/', function () {
 
 // Rutas específicas (deben ir antes del resource para evitar conflictos)
 Route::get('equipos/search', [EquipoController::class, 'search'])->name('equipos.search');
+
+//Ruta para reportes
+Route::get('reportes', [ReportesController::class, 'index'])->name('reportes.index');
+
 // Ruta para ver equipos por tipo (nombre)
 Route::get('/equipos/tipos', [EquipoController::class, 'porEquipos'])->name('equipos.por_tipo');
 Route::get('/equipos/tipo/{nombreEquipo}', [EquipoController::class, 'detalleEquipo'])->name('equipos.detalle_tipo');
