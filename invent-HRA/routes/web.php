@@ -8,7 +8,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Rutas para el CRUD de equipos
+
 // Rutas específicas (deben ir antes del resource para evitar conflictos)
 Route::get('equipos/search', [EquipoController::class, 'search'])->name('equipos.search');
 // Ruta para ver equipos por tipo (nombre)

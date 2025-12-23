@@ -137,7 +137,8 @@
                                        name="serial" 
                                        id="serial"
                                        class="w-full px-4 py-3 rounded-2xl border-2 border-gray-100 focus:border-blue-300 focus:ring-0 transition-all duration-300"
-                                       placeholder="Número único de serie">
+                                       placeholder="Número único de serie"
+                                       onkeydown="return event.key !== 'Enter';">
                             </div>
 
                             <!-- Activo Fijo -->
@@ -170,6 +171,7 @@
                                 <input type="text" 
                                        name="responsable" 
                                        id="responsable"
+                                       value="IT"
                                        required
                                        class="w-full px-4 py-3 rounded-2xl border-2 border-gray-100 focus:border-blue-300 focus:ring-0 transition-all duration-300"
                                        placeholder="Nombre del responsable">
@@ -186,7 +188,10 @@
                                         class="w-full px-4 py-3 rounded-2xl border-2 border-gray-100 focus:border-blue-300 focus:ring-0 transition-all duration-300">
                                     <option value="">Seleccione departamento</option>
                                     @foreach($departamentos as $departamento)
-                                        <option value="{{ $departamento }}">{{ $departamento }}</option>
+                                        <option value="{{ $departamento }}" 
+                                                @if($departamento == 'TI') selected @endif>
+                                            {{ $departamento }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -202,7 +207,9 @@
                                         class="w-full px-4 py-3 rounded-2xl border-2 border-gray-100 focus:border-blue-300 focus:ring-0 transition-all duration-300">
                                     <option value="">Seleccione sucursal</option>
                                     @foreach($sucursales as $sucursal)
-                                        <option value="{{ $sucursal }}">{{ $sucursal }}</option>
+                                        <option value="{{ $sucursal }}" @if($sucursal == 'Cau Escalon') selected @endif>
+                                            {{ $sucursal }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -276,7 +283,9 @@
                                         class="w-full px-4 py-3 rounded-2xl border-2 border-gray-100 focus:border-blue-300 focus:ring-0 transition-all duration-300">
                                     <option value="">Seleccione condición</option>
                                     @foreach($condiciones as $condicion)
-                                        <option value="{{ $condicion }}">{{ $condicion }}</option>
+                                        <option value="{{ $condicion }}" @if($condicion == 'Nuevo') selected @endif>
+                                            {{ $condicion }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -292,7 +301,9 @@
                                         class="w-full px-4 py-3 rounded-2xl border-2 border-gray-100 focus:border-blue-300 focus:ring-0 transition-all duration-300">
                                     <option value="">Seleccione estado</option>
                                     @foreach($estados as $estado)
-                                        <option value="{{ $estado }}">{{ $estado }}</option>
+                                        <option value="{{ $estado }}" @if($estado == 'Activo') selected @endif>
+                                            {{ $estado }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -351,6 +362,7 @@
                                 </label>
                                 <input type="text" 
                                        name="tecnico" 
+                                       value="STOCK"
                                        id="tecnico"
                                        class="w-full px-4 py-3 rounded-2xl border-2 border-gray-100 focus:border-blue-300 focus:ring-0 transition-all duration-300"
                                        placeholder="Nombre del técnico">
@@ -364,6 +376,7 @@
                                 <input type="text" 
                                        name="ticket" 
                                        id="ticket"
+                                       value="STOCK"
                                        class="w-full px-4 py-3 rounded-2xl border-2 border-gray-100 focus:border-blue-300 focus:ring-0 transition-all duration-300"
                                        placeholder="Número de ticket/soporte">
                             </div>

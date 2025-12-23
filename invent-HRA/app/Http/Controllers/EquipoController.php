@@ -11,12 +11,13 @@ class EquipoController extends Controller
     public function index()
 {
     // Estadísticas para el dashboard
-    $totalEquipos = Equipo::count();
-    $equiposActivos = Equipo::where('estado', 'Activo')->count();
-    $enMantenimiento = Equipo::where('estado', 'En Mantenimiento')->count();
-    $inactivos = Equipo::where('estado', 'Inactivo')->count();
-    $asignados = Equipo::where('estado', 'Asignado')->count();
-    $dadosDeBaja = Equipo::where('estado', 'Dado de Baja')->count();
+    // Estadísticas para el dashboard
+    $totalEquipos = Equipo::sum('cantidad');
+    $equiposActivos = Equipo::where('estado', 'Activo')->sum('cantidad');
+    $enMantenimiento = Equipo::where('estado', 'En Mantenimiento')->sum('cantidad');
+    $inactivos = Equipo::where('estado', 'Inactivo')->sum('cantidad');
+    $asignados = Equipo::where('estado', 'Asignado')->sum('cantidad');
+    $dadosDeBaja = Equipo::where('estado', 'Dado de Baja')->sum('cantidad');
     
     // Calcular valor total del inventario
     $valorTotal = Equipo::sum('valor_actual') ?? 0;
@@ -315,12 +316,13 @@ public function store(Request $request)
         ->paginate(10);
 
     // Recargar las estadísticas para el dashboard
-    $totalEquipos = Equipo::count();
-    $equiposActivos = Equipo::where('estado', 'Activo')->count();
-    $enMantenimiento = Equipo::where('estado', 'En Mantenimiento')->count();
-    $inactivos = Equipo::where('estado', 'Inactivo')->count();
-    $asignados = Equipo::where('estado', 'Asignado')->count();
-    $dadosDeBaja = Equipo::where('estado', 'Dado de Baja')->count();
+    // Recargar las estadísticas para el dashboard
+    $totalEquipos = Equipo::sum('cantidad');
+    $equiposActivos = Equipo::where('estado', 'Activo')->sum('cantidad');
+    $enMantenimiento = Equipo::where('estado', 'En Mantenimiento')->sum('cantidad');
+    $inactivos = Equipo::where('estado', 'Inactivo')->sum('cantidad');
+    $asignados = Equipo::where('estado', 'Asignado')->sum('cantidad');
+    $dadosDeBaja = Equipo::where('estado', 'Dado de Baja')->sum('cantidad');
     $valorTotal = Equipo::sum('valor_actual') ?? 0;
 
     return view('equipos.index', compact(
