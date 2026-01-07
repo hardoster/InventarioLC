@@ -148,10 +148,12 @@
                 <th>Activo Fijo</th>
                 <th>Acciones</th>
                 <th>Estado</th>
-                <th>Responsable</th>
+                <th>Tecnico</th>
                 <th>Departamento</th>
                 <th>Sucursal</th>
                 <th>Condición</th>
+                <th>Cantidad</th>
+                <th>Ubicación</th>
                 
             </tr>
         </thead>
@@ -208,7 +210,7 @@
                         {{ $equipo->estado }}
                     </span>
                 </td>
-                <td>{{ $equipo->responsable }}</td>
+                <td>{{ $equipo->tecnico }}</td>
                 <td>{{ $equipo->departamento }}</td>
                 <td>{{ $equipo->sucursal }}</td>
              
@@ -221,6 +223,8 @@
                         {{ $equipo->condicion }}
                     </span>
                 </td>
+                <td>{{ $equipo->cantidad ?? 'N/A' }}</td>
+                <td>{{ $equipo->ubicacion ?? 'N/A' }}</td>
                 
             </tr>
             @endforeach
@@ -287,12 +291,23 @@
 
                         <a href="{{ route('equipos.por_tipo') }}" 
                         class="w-full flex items-center space-x-3 p-3 rounded-2xl border-2 border-gray-100 hover:border-blue-200 transition-all duration-300">
-                            <div class="p-2 rounded-xl bg-blue-50 border-2 border-blue-100">
-                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            <div class="p-2 rounded-xl bg-amber-50 border-2 border-amber-100">
+                                <svg   class="w-5 h-5 text-amber-600"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                 </svg>
                             </div>
                             <span class="font-medium text-gray-700">Ver por tipos</span>
+                        </a>
+
+                         <a href="{{ route('equipos.por_existencias') }}" 
+                        class="w-full flex items-center space-x-3 p-3 rounded-2xl border-2 border-gray-100 hover:border-blue-200 transition-all duration-300">
+                            <div class="p-2 rounded-xl bg-red-50 border-2 border-red-100">
+                                <svg class="w-5 h-5 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6 9 12.75l4.286-4.286a11.948 11.948 0 0 1 4.306 6.43l.776 2.898m0 0 3.182-5.511m-3.182 5.51-5.511-3.181" />
+                                </svg>
+                            </div>
+                            <span class="font-medium text-gray-700">Equipos por agotarse</span>
                         </a>
                     </div>
                 </div>

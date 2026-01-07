@@ -17,6 +17,8 @@ Route::get('reportes', [ReportesController::class, 'index'])->name('reportes.ind
 
 // Ruta para ver equipos por tipo (nombre)
 Route::get('/equipos/tipos', [EquipoController::class, 'porEquipos'])->name('equipos.por_tipo');
+Route::get('/equipos/existencias', [EquipoController::class, 'porExistencias'])->name('equipos.por_existencias');
+
 Route::get('/equipos/tipo/{nombreEquipo}', [EquipoController::class, 'detalleEquipo'])->name('equipos.detalle_tipo');
 
 // Rutas para el CRUD de equipos

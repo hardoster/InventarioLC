@@ -32,6 +32,7 @@ class Equipo extends Model
         'valor_actual',
         'estado_garantia',
         'estado',
+        'ubicacion',
     ];
 
     protected $casts = [
@@ -53,7 +54,8 @@ class Equipo extends Model
                     ->orWhere('activo_fijo', 'like', "%{$search}%")
                     ->orWhere('responsable', 'like', "%{$search}%")
                     ->orWhere('modelo', 'like', "%{$search}%")
-                    ->orWhere('ticket', 'like', "%{$search}%");
+                    ->orWhere('ticket', 'like', "%{$search}%")
+                    ->orWhere('ubicacion', 'like', "%{$search}%");
     }
 
 }

@@ -14,7 +14,7 @@ export default defineConfig({
         host: '0.0.0.0',
         port: 5173,
         hmr: {
-            host: '192.168.2.153', // Reemplaza con tu IP real
+            host: '172.18.95.152', // Reemplaza con tu IP real
             protocol: 'ws'
         },
     },

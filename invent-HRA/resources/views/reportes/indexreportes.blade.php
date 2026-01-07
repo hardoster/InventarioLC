@@ -338,6 +338,7 @@
                                 <th class="text-left text-sm font-semibold text-gray-700 py-4 px-6 rounded-tl-2xl">Equipo</th>
                                 <th class="text-left text-sm font-semibold text-gray-700 py-4 px-6">Cantidad Total</th>
                                 <th class="text-left text-sm font-semibold text-gray-700 py-4 px-6 rounded-tr-2xl">Activo Fijo (Ref)</th>
+                                <th class="text-left text-sm font-semibold text-gray-700 py-4 px-6 rounded-tr-2xl">Descripcion</th>
                             @else
                                 <th class="text-left text-sm font-semibold text-gray-700 py-4 px-6 rounded-tl-2xl">Equipo</th>
                                 <th class="text-left text-sm font-semibold text-gray-700 py-4 px-6">Cantidad</th>
@@ -360,6 +361,7 @@
                                     <span class="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">{{ $equipo->total_cantidad }}</span>
                                 </td>
                                 <td class="py-4 px-6 text-sm text-gray-500">{{ $equipo->ejemplo_activo_fijo ?? 'N/A' }}</td>
+                                <td class="py-4 px-6 text-sm text-gray-500">{{ $equipo->descripcion ?? 'N/A' }}</td>
                             @else
                                 <td class="py-4 px-6">
                                     <div class="font-medium text-gray-900">{{ $equipo->equipo }}</div>
@@ -454,6 +456,7 @@
                                     '<div style="text-align: center; margin-bottom: 20px;">' +
                                     '<h1 style="font-size: 24px; font-weight: bold; color: #1e3a8a;">Reporte de Inventario</h1>' +
                                     '<p style="font-size: 14px; color: #64748b;">Generado el: ' + new Date().toLocaleDateString() + '</p>' +
+                                    '<p style="font-size: 14px; color: #64748b;">Sistema creado por Harrison Aguilar todos los derechos reservados © 2026</p>' +
                                     '</div>'
                                 );
         

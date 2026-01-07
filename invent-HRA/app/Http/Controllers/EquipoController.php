@@ -44,8 +44,9 @@ class EquipoController extends Controller
     $estadosGarantia = ['Vigente', 'Vencida', 'No Aplica'];
     $estados = ['Activo', 'Inactivo', 'En Mantenimiento', 'Dado de Baja','Asignado'];
     $departamentos = ['TI', 'Administración', 'Contabilidad', 'Recursos Humanos', 'Tienda', 'Marketing'];
-    $sucursales = ['Cau Escalon', 'Cau Proceres','LC San Luis', 'LC Proceres', 'LC Merliot', 'Centro Historico',
-     'LC Santa Rosa de Lima', 'San Marino', 'LC USULUTAN', 'LC Ahuachapán', 'LC San Martin'];
+    $sucursales = ['Cau Escalon', 'Cau Proceres','LC San Luis', 'LC Proceres', 'LC Merliot', 'Centro Historico','LC Las Palmas',
+     'LC Santa Rosa de Lima', 
+     'LC San jacinto', 'San Marino', 'LC USULUTAN', 'LC Ahuachapán', 'LC San Martin'];
     $categorias = ['Computadoras', 'Impresoras', 'Servidores', 'Redes', 'Telefonía', 'Electrónicos'];
 
     return view('equipos.create', compact(
@@ -187,9 +188,9 @@ public function store(Request $request)
     $estadosGarantia = ['Vigente', 'Vencida', 'No Aplica'];
     $estados = ['Activo', 'Inactivo', 'En Mantenimiento', 'Dado de Baja','Asignado'];
     $departamentos = ['TI', 'Administración', 'Contabilidad', 'Recursos Humanos', 'Tienda', 'Marketing'];
-    $sucursales = ['CAU ESCALON', 'CAU PROCERES', 'LC PROCERES', 'LC MERLIOT', 'LC SAN LUIS', 
+    $sucursales = ['CAU ESCALON', 'CAU PROCERES', 'LC PROCERES', 'LC MERLIOT', 'LC SAN LUIS', 'LC Las Palmas' ,
     'LC AHUACHAPAN' ,'Centro Historico','LC Santa Rosa de lima', 'LC Pericentro apopa',
-    'LC Chalatenango', 'San Marino', 'LC USULUTAN', 'LC San Martin'];
+    'LC Chalatenango', 'San Marino', 'LC USULUTAN', 'LC San Martin', 'LC San jacinto'];
     $categorias = ['Computadoras', 'Impresoras', 'Servidores', 'Redes', 'Telefonía', 'Electrónicos'];
 
     return view('equipos.edit', compact(
@@ -371,6 +372,15 @@ public function porEquipos()
 
 
 
+
+
+
+
+
+
+
+
+
 /**
  * Mostrar equipos de un nombre/tipo específico
  */
@@ -405,6 +415,48 @@ public function detalleEquipo($nombreEquipo)
         'valorTipo'
     ));
 }
+
+
+public function porExistencias()
+{
+$equiposGroup = Equipo::select('equipo')
+    ->selectRaw('SUM(cantidad) as total')
+    ->where('estado', 'Activo') 
+    ->groupBy('equipo')
+    ->having('total', '<=', 2) 
+    ->orderBy('equipo')
+    ->get();
+    
+    $totalEquipos = Equipo::where('cantidad', '<=', 2)->count();
+    $equiposActivos = Equipo::where('estado', 'Activo')
+                            ->where('cantidad', '<=', 2)
+                            ->count();
+    $totalTipos = $equiposGroup->count();
+
+    return view('equipos.Existencias', compact(
+        'equiposGroup',
+        'totalEquipos',
+        'equiposActivos',
+        'totalTipos',
+       
+    ));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
