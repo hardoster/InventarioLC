@@ -129,13 +129,23 @@
         <h2 class="text-2xl font-bold text-gray-900">Inventario de Equipos</h2>
         <p class="text-gray-600">Gestión completa del inventario</p>
     </div>
-    <a href="{{ route('equipos.create') }}" 
-       class="bg-blue-500 text-white px-6 py-3 rounded-2xl font-medium hover:bg-blue-600 transition-all duration-300 flex items-center space-x-2">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-        </svg>
-        <span>Nuevo Equipo</span>
-    </a>
+    <div class="flex items-center space-x-3">
+        <button id="scanButton" 
+                class="bg-amber-500 text-white px-6 py-3 rounded-2xl font-medium hover:bg-amber-600 transition-all duration-300 flex items-center space-x-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1l-1 1h2l-1-1V4zM4 12H3m1-1V4a2 2 0 012-2h10a2 2 0 012 2v7m-6 7l1 1v-3m-1 4h2l-1-1v-2m-9 1h7M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h2v2H7V7zm3 0h2v2h-2V7zm3 0h2v2h-2V7zm-9 3h2v2H7v-2zm3 0h2v2h-2v-2zm3 0h2v2h-2v-2zm-6 3h2v2H7v-2zm3 0h2v2h-2v-2zm3 0h2v2h-2v-2z"></path>
+            </svg>
+            <span>Escanear QR</span>
+        </button>
+        <a href="{{ route('equipos.create') }}" 
+           class="bg-blue-500 text-white px-6 py-3 rounded-2xl font-medium hover:bg-blue-600 transition-all duration-300 flex items-center space-x-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            <span>Nuevo Equipo</span>
+        </a>
+    </div>
 </div>
 
 <!-- Tabla con DataTables -->
@@ -382,6 +392,103 @@ $(document).ready(function() {
     $('.dataTables_length select').addClass('px-3 py-1 border rounded-lg');
     $('.dataTables_paginate .paginate_button').addClass('px-3 py-1 mx-1 rounded-lg border hover:bg-gray-100');
     $('.dataTables_paginate .paginate_button.current').addClass('bg-blue-500 text-white border-blue-500');
+    // --- QR Scanner Integration ---
+    let html5QrCode;
+    const scannerModal = document.getElementById('scannerModal');
+    const scanButton = document.getElementById('scanButton');
+    const closeScanner = document.getElementById('closeScanner');
+
+    function startScanner() {
+        // Check if browser supports camera access (Secure Context check)
+        if (!window.isSecureContext && window.location.hostname !== 'localhost') {
+            alert("Acceso a la cámara bloqueado: El navegador requiere HTTPS para acceder a la cámara cuando no es 'localhost'. Estás usando: " + window.location.origin);
+            return;
+        }
+
+        scannerModal.classList.remove('hidden');
+        scannerModal.classList.add('flex');
+        
+        // Initialize the library
+        if (!html5QrCode) {
+            html5QrCode = new Html5Qrcode("reader");
+        }
+
+        const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+            const table = $('#equiposTable').DataTable();
+            table.search(decodedText).draw();
+            stopScanner();
+        };
+        
+        const config = { fps: 10, qrbox: { width: 300, height: 50 } };
+        
+        // Request permissions first by getting cameras
+        Html5Qrcode.getCameras().then(devices => {
+            if (devices && devices.length) {
+                // If cameras found, start the background one or the first one
+                html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback)
+                    .catch((err) => {
+                        console.error("Error starting scanner:", err);
+                        alert("Error al iniciar cámara: " + err);
+                        stopScanner();
+                    });
+            } else {
+                alert("No se detectaron cámaras en este dispositivo.");
+                stopScanner();
+            }
+        }).catch(err => {
+            console.error("Permission error:", err);
+            alert("Error de permisos o cámara no disponible: " + err);
+            stopScanner();
+        });
+    }
+
+    function stopScanner() {
+        if (html5QrCode && html5QrCode.isScanning) {
+            html5QrCode.stop().then(() => {
+                html5QrCode.clear();
+                scannerModal.classList.add('hidden');
+                scannerModal.classList.remove('flex');
+            }).catch(err => console.error("Error stopping scanner:", err));
+        } else {
+            scannerModal.classList.add('hidden');
+            scannerModal.classList.remove('flex');
+        }
+    }
+
+    scanButton.addEventListener('click', startScanner);
+    closeScanner.addEventListener('click', stopScanner);
+    
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !scannerModal.classList.contains('hidden')) {
+            stopScanner();
+        }
+    });
 });
 </script>
+
+<!-- Scanner Modal -->
+<div id="scannerModal" class="hidden fixed inset-0 z-50 overflow-auto bg-black bg-opacity-75 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl relative">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold text-gray-900 flex items-center">
+                <svg class="w-6 h-6 mr-2 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1l-1 1h2l-1-1V4zM4 12H3m1-1V4a2 2 0 012-2h10a2 2 0 012 2v7m-6 7l1 1v-3m-1 4h2l-1-1v-2m-9 1h7M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+                Escaneando Código
+            </h3>
+            <button id="closeScanner" class="text-gray-400 hover:text-gray-600 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <div id="reader" style="width: 100%;" class="rounded-2xl overflow-hidden border-2 border-dashed border-gray-200"></div>
+        
+        <p class="mt-4 text-sm text-gray-500 text-center">
+            Apunta tu cámara hacia un código QR o código de barras de un equipo.
+        </p>
+    </div>
+</div>
 @endsection
